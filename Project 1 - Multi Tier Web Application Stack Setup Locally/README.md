@@ -1,3 +1,5 @@
+# Project 1 - Multi Tier Web Application Setup Locally
+
 Welcome to this project where I've orchestrated a 3-Tier Application Stack setup involving MySQL/MariaDB, Memcached, RabbitMQ, Tomcat, and Nginx. To achieve this, I've manually created VMs using a Vagrantfile and utilized a bash script for configuring Linux servers.
 
 The project utilizes Maven to build the artifact, which is then deployed to the Tomcat server.
@@ -15,6 +17,8 @@ The project utilizes Maven to build the artifact, which is then deployed to the 
 5. The workflow involved Nginx forwarding requests to the Tomcat server, which then directed them to the RabbitMQ message broker, further to Memcached, and finally to the MySQL server. Notably, queries executed on the Tomcat server were cached in Memcache for optimization.
 
 ## Prerequisites
+- Oracle Virtual Box
+- Vagrant 2.3.4 or later
 - JDK 1.8 or later
 - Maven 3 or later
 - MySQL 5.6 or later
