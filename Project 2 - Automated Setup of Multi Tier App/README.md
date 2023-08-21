@@ -10,7 +10,7 @@ In the first project I have set up the 3-Tier Application manually, but in this 
  * Git
  * IDE (SublimeText, VSCode, etc)
 
-## 1. Prepare Bash Scripts for VMs
+## 1. Create Bash Scripts for VMs
 All of the scripts are available in this repository - `Project 2 - Automated Setup of Multi Tier App\vagrant\Automated_provisioning`.
 ### Bash Script for the database
 - Create `mysql.sh` file for the database.
@@ -23,7 +23,7 @@ All of the scripts are available in this repository - `Project 2 - Automated Set
 ### Bash Script for Nginx server
 - Create a final Bash Script `nginx.sh` for provisioning Nginx server which will forward requests to the backend application.
 
-## 2. Prepare Bash Scripts for VMs
+## 2. Bring up the VMs
 - Clone the repository:
 ```sh
 git clone https://github.com/Veluthil/Vprofile-Project.git
@@ -40,7 +40,7 @@ vagrant up
 ```
 Be aware that this will take some time.
 
-## 3. Validate the Application from the browser
+## 3. Validate the Application from the browser and clean up
 - Validate frontend of the application using hostname given in Vagrantfile or IP address of `web01`.
 - Check backend services. 
 - Validate RabbitMq service.
