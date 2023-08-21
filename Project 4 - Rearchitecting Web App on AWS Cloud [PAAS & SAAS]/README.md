@@ -1,4 +1,4 @@
-## Comprehensive DevOps Infrastructure Setup Guide
+# Project 4 Rearchitecting Web App on AWS Cloud [PAAS & SAAS]
 
 Welcome to the comprehensive step-by-step guide for setting up a powerful DevOps infrastructure using various AWS services. This guide will walk you through each critical step to ensure you create a robust and efficient architecture for your applications.
 
