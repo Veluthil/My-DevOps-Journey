@@ -1,4 +1,4 @@
-# Project 3 Lift and Shift - AWS Cloud for the Application Setup
+# Project 3 - Lift and Shift - AWS Cloud for the Application Setup
 
 ## Prerequisites:
  * AWS Account
