@@ -11,6 +11,7 @@ In the first project I have set up the 3-Tier Application manually, but in this 
  * IDE (SublimeText, VSCode, etc)
 
 ## 1. Prepare Bash Scripts for VMs
+All of the scripts are available in this repository - `Project 2 - Automated Setup of Multi Tier App\vagrant\Automated_provisioning`.
 ### Bash Script for the database
 - Create `mysql.sh` file for the database.
 ### Bash Script for Memcache
@@ -18,7 +19,7 @@ In the first project I have set up the 3-Tier Application manually, but in this 
 ### Bash Script for RabbitMQ
 - `rabbitmq.sh` for RabbitMQ.
 ### Bash Script for Application
-- Create a Bash Script for provisioning Tomcat server - `tomcat_ubuntu.sh` for Ubuntu OS and `tomcat.sh``
+- Create a Bash Script for provisioning Tomcat server - `tomcat_ubuntu.sh` for Ubuntu OS and `tomcat.sh`.
 ### Bash Script for Nginx server
 - Create a final Bash Script `nginx.sh` for provisioning Nginx server which will forward requests to the backend application.
 
