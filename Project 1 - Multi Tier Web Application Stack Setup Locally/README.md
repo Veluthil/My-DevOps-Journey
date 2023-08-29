@@ -15,8 +15,6 @@ Next, navigate to the following file:
 - The `db_backup.sql` file is a MySQL dump containing the required database schema. To import it into your MySQL server, execute the following command:
   `> mysql -u <user_name> -p accounts < db_backup.sql`
 
-Absolutely, here's the improved text with all the scripts and commands retained:
-
 ### Prerequisites
 
 Ensure you have the following tools and software installed:
@@ -401,4 +399,4 @@ sudo ln -s /etc/nginx/sites-available/vproapp /etc/nginx/sites-enabled/vproapp
 sudo systemctl restart nginx
 ```
 
-By following these steps, you've automated the setup of your multi-tier application. Remember to follow the order of provisioning services for a successful setup. Happy automating!
+By following these steps, you've automated the setup of your multi-tier application. Remember to follow the order of provisioning services for a successful setup.
