@@ -1,7 +1,7 @@
-# Project 5 - Continuous Integration with Jenkins, Nexus, Sonarqube and Slack
+# Project 5 - Continuous Integration with Jenkins, Nexus, SonarQube and Slack
 
 
-## Pre-requisities:
+## Prerequisities:
 
  * AWS Account
  * GitHub account
@@ -73,7 +73,6 @@ KeyPair: CREATE NEW KEYPAIR, FOR EXAMPLE SonarKey.pem
 Additional Details: copy it from userdata/sonar_setup.sh
 ```
 
-
 ### 3. Post Installation Steps
 
 #### For Jenkins Server:
@@ -104,7 +103,7 @@ Build Timestamp
 sudo -i
 systemctl status nexus
 ```
-- Go to `http://<PUBLIC_IP_FOR_NexusServer>:8081`, then sign-in. Initial password will be located `/opt/nexus/sonatype-work/nexus3/admin.password`
+- Go to `http://<PUBLIC_IP_FOR_NexusServer>:8081`, then sign in. Initial password will be located `/opt/nexus/sonatype-work/nexus3/admin.password`
 ```sh
 cat /opt/nexus/sonatype-work/nexus3/admin.password
 ```
@@ -115,3 +114,98 @@ cat /opt/nexus/sonatype-work/nexus3/admin.password
 - Go to `http://<PUBLIC_IP_FOR_SonarServer>`.
 
 - Login with username `admin` and password `admin`.
+
+### 4. Install JDK8 and Maven.
+
+- This application uses both JDK11 and JDK8
+- Go to `Manage Jenkins` -> `Tools`
+- ssh to Jenkins EC2 and find JAVA_HOME path in /usr/lib/jvm/
+- Find JDK section and click Add JDK:
+```sh
+Name: OracleJDK11
+untick Install Automatically
+JAVA_HOME: /usr/lib/jvm/java-1.11.0-openjdk-amd64
+```
+
+- Add JDK8 - it is not installed yet, so look at the next step.
+```sh
+Under JDK -> Add JDK
+Name: OracleJDK8
+untick Install Automatically
+JAVA_HOME: LOOK AT THE NEXT STEP
+```
+- Currently Jenkins has JDK-11 (this app can also work with it), so ssh into Jenkins server and install JDK-8. Get the PATH to JDK-8 and paste to JAVA_HOME in the previous step. 
+- After installation `JAVA_HOME` for JDK-8 is `/usr/lib/jvm/java-1.8.0-openjdk-amd64`
+```sh
+sudo apt update -y
+sudo apt install openjdk-8-jdk -y
+sudo -i
+ls /usr/lib/jvm
+### both jdk-11 and jdk-8 should be in this path ###
+java-1.11.0-openjdk-amd64  java-11-openjdk-amd64  openjdk-11
+java-1.8.0-openjdk-amd64   java-8-openjdk-amd64
+``` 
+
+- Next set up Maven - click Add Maven in Maven section.
+```sh
+Name: MAVEN3
+Version: 3.9.3
+``` 
+
+### 5. Install Plugins for CI
+
+- Go to `Manage Jenkins` -> `Manage Plugins` -> `Available`
+- Install without restart:
+```sh 
+Nexus Artifact Uploader
+SonarQube Scanner
+Build Timestamp
+Pipeline Maven Integration
+Pipeline Utility Steps
+```
+
+### 6. Create the first Pipeline
+
+- Go to `Dashboard` -> `New Item` in Jenkins, choose Pipeline and name it as you like
+- In Pipeline section paste the following script:
+```
+pipeline {
+	agent any
+	tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+
+	stages {
+	    stage('Fetch code') {
+            steps {
+               git branch: 'vp-rem', url: 'https://github.com/devopshydclub/vprofile-repo.git'
+            }
+
+	    }
+
+	    stage('Build'){
+	        steps{
+	           sh 'mvn install -DskipTests'
+	        }
+
+	        post {
+	           success {
+	              echo 'Now Archiving it...'
+	              archiveArtifacts artifacts: '**/target/*.war'
+	           }
+	        }
+	    }
+
+	    stage('UNIT TEST') {
+            steps{
+                sh 'mvn test'
+            }
+        }
+	}
+}
+```
+- Save and click `Build now` - you can check logs. The pipeline should be built successfully.
+- In Workspace go to /target/ - you should see the artifact.
+
+### 7. Code Analysis
