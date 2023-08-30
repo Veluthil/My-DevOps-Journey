@@ -209,3 +209,346 @@ pipeline {
 - In Workspace go to /target/ - you should see the artifact.
 
 ### 7. Code Analysis
+
+- First integrate SonarQube with Jenkins and install SonarQube Scanner tool.
+- Go to `Manage Jenkins` -> `Tools` -> `SonarQube Scanner` -> `Add SonarQube Scanner`
+```sh
+Name: sonar4.7
+Check: Install automatically
+Version: SonarQube Scanner 4.7.0.*
+```
+- Go to `Configure system` -> `SonarQube servers`
+```sh
+Check: Environmental variables
+Name: sonar
+Server URL: http://FETCH SONARQUBE PUBLIC OR PRIVATE IP - REMEMBER THAT PUBLIC IP WILL CHANGE EACH TIME YOU WILL POWER OFF AND ON AN INSTANCE
+Server authentication token: save and LOOK FOR THE NEXT STEP
+```
+- Go to SonarQube -> `My Account` -> `Security` -> `Generate Token` and copy its value in a next step
+```sh
+Generate Tokens: jenkins
+```
+- In Jenkins click add `Jenkins` in `Server authentication token`:
+```sh
+Kind: Secret text
+Secret: COPY YOUR SECRET HERE
+ID: MySonarToken
+Description: MySonarToken
+```
+
+- Create a new Jenkinsfile:
+```
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+    stages{
+        stage('Fetch code') {
+          steps{
+              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
+          }  
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+    }
+}
+```
+
+- You can either update a previous item with this pipeline or create a new one.
+- Run this pipeline.
+
+### 8. Sonar Analysis
+
+- Now let the SonarQube scan the code and upload results to its server.
+- In the previous pipeline add a new stage:
+```
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+    stages{
+        stage('Fetch code') {
+          steps{
+              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
+          }  
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+        stage('Checkstyle Analysis') {
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+               withSonarQubeEnv('sonar') {
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              }
+            }
+        }
+
+    }
+}
+```
+
+- Run the pipeline and after its success go to SonarQube and `Projects` - you can see that the project has passed the Quality Gate.
+- You can create your own Quality Gates - this will be explained in the next step.
+
+### 9. Quality Gates
+
+- Add another step in the pipeline:
+```
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+    stages{
+        stage('Fetch code') {
+          steps{
+              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
+          }  
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+        stage('Checkstyle Analysis'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+               withSonarQubeEnv('sonar') {
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+    }
+}
+```
+- In SonarQube go to `Quality Gates` -> `Create`:
+```sh
+Name: vprofile-QG
+Add condition: 
+Check: On overall code
+Quality Gate fails when: Bugs
+Value: 60 to make it fail, 100 to make it pass
+```
+- Go to your project -> `Project Settings` -> `Quality Gate` -> Choose the newly created one (vprofile-QG).
+- Now you need to create a Webhook to allow SonarQube send a message to Jenkins.
+- Go to `Project Settings` -> `Webhooks` -> `Create`
+```sh
+Name: jenkinrepos-ci-webhook
+URL: http://JENKINS PRIVATE IP:8080/sonarqube-webhook
+```
+- Make sure that you set Jenkins Security Group to allow traffic on 8080 from anywhere or from SonarQube Security Group.
+- Now test your pipeline: depending on a Value set in a new Quality Gate your pipeline will fail or pass. You can check the details in SonarQube Project section.
+- Change the Quality Gate to the default one or increase the value to 100 in a currently set one.
+
+### 10. Upload the artifact to Nexus Repository
+
+- Go to `http://NEXUS PUBLIC IP:8081` and sign in with login `admin` and password that you set previously.
+- Go to `Settings` -> `Repositories` -> `Create Repository` -> `maven2 (hosted)`
+```sh
+Name: vprofile-repo
+```
+- Create repository.
+- Go to Jenkins -> `Manage Jenkins` -> `Manage Credentials` -> `Stores scoped to Jenkins` -> `Jenkins` -> `Global credentials` -> `Add Credentials` 
+```sh
+Username: admin
+Password: YOUR NEXUS PASSWORD
+ID: nexuslogin
+Description: nexuslogin
+```
+- Add new stage in a pipeline or create a new pipeline in Jenkins:
+```
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+    stages{
+        stage('Fetch code') {
+          steps{
+              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
+          }  
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+        stage('Checkstyle Analysis'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+               withSonarQubeEnv('sonar') {
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage("UploadArtifact"){
+            steps{
+                nexusArtifactUploader(
+                  nexusVersion: 'nexus3',
+                  protocol: 'http',
+                  nexusUrl: 'NEXUS PRIVATE IP:8081',
+                  groupId: 'QA',
+                  version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                  repository: 'vprofile-repo',
+                  credentialsId: 'nexuslogin',
+                  artifacts: [
+                    [artifactId: 'vproapp',
+                     classifier: '',
+                     file: 'target/vprofile-v2.war',
+                     type: 'war']
+    				]
+ 				)
+            }
+        }
+    }
+}
+```
+- Go to `Manage Jenkins` -> `Configure System` -> `Build Timestamp` -> `Pattern` 
+```
+yy-MM-dd_HH-mm [or set it to any other pattern you like]
+```
+- And save.
+- You can also change the SonarQube servers URL to private, if you previously used the public one and make sure your token is selected.
+In SonarQube Webhook you can also update the Jenkins IP to the private one, if you used its public one before.
+- Run the pipeline, after its successfull run go to Nexus -> `Browse` -> `vprofile-repo` -> you should see the artifact there with attached timestamp pattern. You can run the pipeline a few more times and check the artifacts names. From there you can download your artifacts (Summary -> Path -> your artifact).
+
+### 11. Slack integration - adding notifications
