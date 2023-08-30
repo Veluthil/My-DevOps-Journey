@@ -586,11 +586,12 @@ pipeline {
 	}
 
     stages{
-        stage('Print error'){
-            steps{
-                sh 'fake comment'
-            }
-        }
+		// Uncomment to make an error in order to check a Failure notification on Slack
+        // stage('Print error'){
+        //     steps{
+        //         sh 'fake comment'
+        //     }
+        // }
         stage('Fetch code') {
           steps{
               git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
