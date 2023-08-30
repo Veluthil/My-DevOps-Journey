@@ -10,6 +10,9 @@
  * SonarQube
  * Slack 
 
+## Project Architecture
+![](images/jenkins-ci.png)
+
 ### 1. Create Security Groups for Jenkins, Nexus and SonarQube
 
 * Jenkins SecGrp
