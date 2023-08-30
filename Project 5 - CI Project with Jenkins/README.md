@@ -168,7 +168,7 @@ Pipeline Utility Steps
 
 - Go to `Dashboard` -> `New Item` in Jenkins, choose Pipeline and name it as you like
 - In Pipeline section paste the following script:
-```
+```groovy
 pipeline {
 	agent any
 	tools {
@@ -237,7 +237,7 @@ Description: MySonarToken
 ```
 
 - Create a new Jenkinsfile:
-```
+```groovy
 pipeline {
     agent any
     tools {
@@ -285,7 +285,7 @@ pipeline {
 
 - Now let the SonarQube scan the code and upload results to its server.
 - In the previous pipeline add a new stage:
-```
+```groovy
 pipeline {
     agent any
     tools {
@@ -351,7 +351,7 @@ pipeline {
 ### 9. Quality Gates
 
 - Add another step in the pipeline:
-```
+```groovy
 pipeline {
     agent any
     tools {
@@ -454,7 +454,7 @@ ID: nexuslogin
 Description: nexuslogin
 ```
 - Add new stage in a pipeline or create a new pipeline in Jenkins:
-```
+```groovy
 pipeline {
     agent any
     tools {
@@ -552,3 +552,132 @@ In SonarQube Webhook you can also update the Jenkins IP to the private one, if y
 - Run the pipeline, after its successfull run go to Nexus -> `Browse` -> `vprofile-repo` -> you should see the artifact there with attached timestamp pattern. You can run the pipeline a few more times and check the artifacts names. From there you can download your artifacts (Summary -> Path -> your artifact).
 
 ### 11. Slack integration - adding notifications
+
+- If you do not have an account on Slack, create one. 
+- Create a new workspace on Slack and name it, for example `vprofilecicd`.
+- Create a new channel, for example `jenkinscicd`.
+- Now create a token to allow Jenkins authenticate into this workspace - search for 'add apps to slack' on Google and look for `Jenkins CI` app. Click on it and choose your previously created channel (jenkinscicd). Click on `Add Jenkins CI integration`.
+Copy and store the token that got created. Click on `Save settings`.
+- Go to Jenkins -> `Manage Jenkins` -> `Plugins` -> search for `Slack Notification` and install without a restart.
+- Go to `Configure System` -> `Slack`
+```
+Workspace: vprofilecicd-[HERE INSERT UNIQUE CHARACTERS FOR YOUR WORKSPACE - CHECK IT ON YOUR SLACK ACCOUNT]
+Credentials: Jenkins
+Kind: Secret text
+Secret: YOUR TOKEN FROM THE PREVIOUS STEP
+ID: slacktoken
+Description: slacktoken
+Save and select your token
+Default channel: #jenkinscicd
+```
+- Test connection, if you get a success save.
+- Add the post installation stage in your pipeline and a key map for colors: 
+```groovy
+def COLOR_MAP = [
+    'SUCCESS': 'good', 
+    'FAILURE': 'danger',
+]
+
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+
+    stages{
+        stage('Print error'){
+            steps{
+                sh 'fake comment'
+            }
+        }
+        stage('Fetch code') {
+          steps{
+              git branch: 'vp-rem', url:'https://github.com/devopshydclub/vprofile-repo.git'
+          }  
+        }
+
+        stage('Build') {
+            steps {
+                sh 'mvn clean install -DskipTests'
+            }
+            post {
+                success {
+                    echo "Now Archiving."
+                    archiveArtifacts artifacts: '**/*.war'
+                }
+            }
+        }
+        stage('Test'){
+            steps {
+                sh 'mvn test'
+            }
+
+        }
+
+        stage('Checkstyle Analysis'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+        }
+
+        stage('Sonar Analysis') {
+            environment {
+                scannerHome = tool 'sonar4.7'
+            }
+            steps {
+               withSonarQubeEnv('sonar') {
+                   sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+              }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage("UploadArtifact"){
+            steps{
+                nexusArtifactUploader(
+                  nexusVersion: 'nexus3',
+                  protocol: 'http',
+                  nexusUrl: 'INSERT YOUR NEXUS PRIVATE IP:8081',
+                  groupId: 'QA',
+                  version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
+                  repository: 'vprofile-repo',
+                  credentialsId: 'nexuslogin',
+                  artifacts: [
+                    [artifactId: 'vproapp',
+                     classifier: '',
+                     file: 'target/vprofile-v2.war',
+                     type: 'war']
+                  ]
+                )
+            }
+        }
+    }
+    post {
+        always {
+            echo 'Slack Notifications.'
+            slackSend channel: '#jenkinscicd',
+                color: COLOR_MAP[currentBuild.currentResult],
+                message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
+        }
+    } 
+}
+```
+- Run your pipeline -  check for a success notification on your Slack channel. If everything goes right - congratulations on finishing this project! 
+You can also make some mistakes in the Jenkinsfile and run the pipeline to see a Failure notification on your Slack channel.
