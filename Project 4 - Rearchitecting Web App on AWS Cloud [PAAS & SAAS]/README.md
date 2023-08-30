@@ -14,6 +14,8 @@ Before diving into the setup process, make sure you have the following prerequis
 
 ### Architecture Overview
 
+![](images/aws-refactor.png)
+
 This guide will help you establish a multi-faceted architecture using AWS services. By following the instructions below, you'll set up a seamless DevOps environment that incorporates various technologies and tools:
 
 1. **Key Pair Creation for Beanstalk EC2 Login:**
