@@ -87,3 +87,100 @@ Access Key ID: PASTE HERE ACCESS KEY FROM THE .CSV DOWNLOADED IN THE 2 STEP
 Secret Access Key: PASTE HERE SECRET ACCESS KEY FROM THE .CSV DOWNLOADED IN THE 2 STEP
 ```
 - And click OK.
+
+### 5. Create a Jenkins pipeline.
+
+- Create a new item in Jenkins (for example 'docker-ci-pipeline'), choose pipeline and paste the following script (remember to fill it with your own data)
+
+```groovy
+pipeline {
+    agent any
+    tools {
+	    maven "MAVEN3"
+	    jdk "OracleJDK8"
+	}
+
+    environment {
+        registryCredential = 'ecr:YOUR_AWS_REGION:awscredentials'
+        appRegistry = "URI FROM THE 2 STEP"
+        vprofileRegistry = "https://URI FROM THE 2 STEP WITHOUT /REPOSITORY NAME"
+    }
+  stages {
+    stage('Fetch code'){
+      steps {
+        git branch: 'docker', url: 'https://github.com/devopshydclub/vprofile-project.git'
+      }
+    }
+
+
+    stage('Test'){
+      steps {
+        sh 'mvn test'
+      }
+    }
+
+    stage ('CODE ANALYSIS WITH CHECKSTYLE'){
+            steps {
+                sh 'mvn checkstyle:checkstyle'
+            }
+            post {
+                success {
+                    echo 'Generated Analysis Result'
+                }
+            }
+        }
+
+        stage('build && SonarQube analysis') {
+            environment {
+             scannerHome = tool 'sonar4.7'
+          }
+            steps {
+                withSonarQubeEnv('sonar') {
+                 sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=vprofile \
+                   -Dsonar.projectName=vprofile-repo \
+                   -Dsonar.projectVersion=1.0 \
+                   -Dsonar.sources=src/ \
+                   -Dsonar.java.binaries=target/test-classes/com/visualpathit/account/controllerTest/ \
+                   -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                   -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                   -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+                }
+            }
+        }
+
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+    stage('Build App Image') {
+       steps {
+         script {
+                dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
+             }
+     }
+    }
+
+    stage('Upload App Image') {
+          steps{
+            script {
+              docker.withRegistry( vprofileRegistry, registryCredential ) {
+                dockerImage.push("$BUILD_NUMBER")
+                dockerImage.push('latest')
+              }
+            }
+          }
+     }
+  }
+}
+```
+- Save and build now.
+_Note: if your build fails due to the lack of memory, do the following steps:_
+_Stop your instance, go to the volume, find root volume of your instance._
+_Select volume, Edit, Modify, In Size change from 8 to 15 GB._
+- After finishing the build successfully, you should see an image tag in your ECR - with each new build run, you will see here new images with different tags. This images can be uploaded to various providers, like K8s.
