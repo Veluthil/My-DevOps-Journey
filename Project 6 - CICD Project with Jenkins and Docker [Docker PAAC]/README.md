@@ -10,7 +10,11 @@
  * AWS CLI
  * IAM User
  * ECR repo
+ * ECS cluster
  * Plugins in Jenkins: ECR, Docker pipeline, AWS SDK for credentials
+
+ ## Project Architecture
+ ![](images/cicd-docker-jenkins.png)
 
  ### 1. Install Docker Engine on the Jenkins Server
 
@@ -184,3 +188,9 @@ _Note: if your build fails due to the lack of memory, do the following steps:_
 _Stop your instance, go to the volume, find root volume of your instance._
 _Select volume, Edit, Modify, In Size change from 8 to 15 GB._
 - After finishing the build successfully, you should see an image tag in your ECR - with each new build run, you will see here new images with different tags. This images can be uploaded to various providers, like K8s, Docker Engine, AWS ECS.
+
+## So far we have managed to achieve Continuous Integration with Docker, now let's move to the final part - Continuous Deployment with Elastic Container Service (in the next projects we will be using Kubernetes for that).
+
+### 6. Create ECS cluster.
+
+- Go to `ECS` in your AWS
