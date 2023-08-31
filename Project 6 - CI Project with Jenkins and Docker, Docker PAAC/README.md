@@ -46,4 +46,24 @@
 
 ### 2. Create IAM user and ECR repository.
 
-- Go to IAM service in your AWS.
+- Go to IAM service in your AWS -> `Create user`:
+```
+User name: jenkins
+Attach policies directly:
+- AmazonEC2ContainerRegistryFullAccess
+- AmazonECS_FullAccess
+```
+- Create user with above settings and next create an access key for this user. Go to `jenkins` user -> `Security Credentials` -> `Access keys` -> `Create access key`:
+```
+Use case: CLI
+Check: I understand the above...
+Create access key
+```
+- Download .csv file.
+- Create ECR repository. Go to `Elastic Container Registry` service -> `Repositories` -> `Create Repository`:
+```
+Visibility settings: Private
+Repository name: vprofileappimg [or whatever you like]
+Create repository
+```
+- Copy the URI and store it for later.
