@@ -67,3 +67,13 @@ Repository name: vprofileappimg [or whatever you like]
 Create repository
 ```
 - Copy the URI and store it for later.
+
+### 3. Install plugins.
+
+- Go to Jenkins `http://JENKINS PUBLIC IP:8080` -> `Manage Jenkins` -> `Plugins` -> `Available` and install without restart:
+  - Docker Pipeline
+  - Amazon ECR
+  - Amazon Web Services SDK :: All
+  - CloudBees Docker Build and Publish
+
+### 4. Store AWS credentials.
