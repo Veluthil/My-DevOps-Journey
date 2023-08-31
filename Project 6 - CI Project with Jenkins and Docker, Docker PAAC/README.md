@@ -77,3 +77,13 @@ Create repository
   - CloudBees Docker Build and Publish
 
 ### 4. Store AWS credentials.
+
+- Go to `Manage Jenkins` -> `Credentials` -> `Stores scoped to Jenkins` -> `Jenkins/System` -> `Global credentials (unrestricted)` -> `Add credentials`:
+```
+Kind: AWS Credentials
+ID: awscredentials [or whatever you like]
+Description: awscredentials
+Access Key ID: PASTE HERE ACCESS KEY FROM THE .CSV DOWNLOADED IN THE 2 STEP
+Secret Access Key: PASTE HERE SECRET ACCESS KEY FROM THE .CSV DOWNLOADED IN THE 2 STEP
+```
+- And click OK.
