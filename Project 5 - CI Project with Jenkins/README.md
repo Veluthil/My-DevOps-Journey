@@ -574,7 +574,7 @@ Save and select your token
 Default channel: #jenkinscicd
 ```
 - Test connection, if you get a success save.
-- Add the post installation stage in your pipeline and a key map for colors: 
+- Add the post installation stage in your pipeline and a function with a key map for colors: 
 ```groovy
 def COLOR_MAP = [
     'SUCCESS': 'good', 
