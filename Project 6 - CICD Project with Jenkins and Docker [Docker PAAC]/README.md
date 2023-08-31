@@ -1,4 +1,4 @@
-# Project 6 - CI Project with Jenkins and Docker [Docker PAAC]
+# Project 6 - CI/CD Project with Jenkins and Docker [Docker PAAC]
 
 ## Prerequisities:
 
@@ -183,4 +183,4 @@ pipeline {
 _Note: if your build fails due to the lack of memory, do the following steps:_
 _Stop your instance, go to the volume, find root volume of your instance._
 _Select volume, Edit, Modify, In Size change from 8 to 15 GB._
-- After finishing the build successfully, you should see an image tag in your ECR - with each new build run, you will see here new images with different tags. This images can be uploaded to various providers, like K8s.
+- After finishing the build successfully, you should see an image tag in your ECR - with each new build run, you will see here new images with different tags. This images can be uploaded to various providers, like K8s, Docker Engine, AWS ECS.
