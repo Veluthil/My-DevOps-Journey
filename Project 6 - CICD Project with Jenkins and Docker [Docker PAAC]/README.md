@@ -355,11 +355,11 @@ pipeline {
 - Under the Clusters > vprofile > Tasks you should see similar view:
 ![](images/ecs-tasks.png)
 
-## Congratulations, this is an end for this project. Now do the clean up in order to avoid costs.
+## Congratulations, this is the end of this project. Now, do the clean up in order to avoid costs.
 
 ### 8. Clean up.
 
-- You can keep the Jenkins EC2 for later projects, but stop this instance. Nexus and SonarQube can be deleted.
+- You can keep the Jenkins EC2 for the later projects, however, you should stop this instance. Nexus and SonarQube can be terminated.
 - ECS Cluster -> go to the `Service` -> `Update Service`:
 ```
 Desired tasks: 0
