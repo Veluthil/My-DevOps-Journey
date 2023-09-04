@@ -1,4 +1,4 @@
-# Project 6 - CI/CD Project with Jenkins and Docker [Docker PAAC]
+# Project 6 - CI/CD Project with Jenkins and Docker (Docker PAAC)
 
 ## Prerequisities:
 
