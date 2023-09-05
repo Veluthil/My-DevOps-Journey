@@ -60,8 +60,8 @@ SCM: Git
 Repository URL: get the SSH URL for your previous step repo
 Credentials: Add Jenkins
     Kind: SSH Username with private key
-    ID: gitsshkey [or anything you like]
-    Description: gitsshkey [or anything you like]
+    ID: gitsshkey [or aything you like]
+    Description: gitsshkey [or aything you like]
     Username: your GitHub account
     Private Key: Enter directly -> Add -> Copy your PRIVATE key (in bash/terminal use 'cat ~/.ssh/id_rsa`)
     Add
@@ -119,7 +119,7 @@ git push origin main
 4. Remote triggers
 - First, Generate JOB URL: `Job Configure` -> `Build Triggers` -> check mark on `Trigger builds remotely` -> give a token name -> generate URL & save in a file
 - Generate Token for User: click on your username drop down button (Top right corner of the page) -> `Configure` -> `API Token` -> `Generate` -> copy the token name and save username:tokenname in a file
-- Generate CRUMB: wget command is required for this, so download wget binary for git bash. Extract content in c:/program files/Git/mingw64/bin. Run below command in Git Bash/Terminal, (replace username, password, Jenkins URL):
+- Generate CRUMB: wget command is required for this, so download wget binary for git bash. Extract content in your path to ../Git/mingw64/bin. Run below command in Git Bash/Terminal, (replace username, password, Jenkins URL):
 ```sh
 wget -q --auth-no-challenge --user username --password password --output-document -
 'http://JENNKINS_IP:8080/crumbIssuer/api/xml?xpath=concat(//crumbRequestField,":",//crumb)'
@@ -133,10 +133,11 @@ Save the token in a file
         E:g admin:116ce8f1ae914b477d0c74a68ffcc9777c
     Crumb
         E:g Jenkins-Crumb:8cb80f4f56d6d35c2121a1cf35b7b501
-Fill all the above details in the below URL and execute:
+Fill all the above details in below URL and execute:
 ```sh
 curl -I -X POST http://username:APItoken @Jenkins_IP:8080/job/JOB_NAME/build?token=TOKENNAME
 -H "Jenkins-Crumb:CRUMB"
 ```
 e:g curl -I -X POST http://admin:110305ffb46e298491ae082236301bde8e@52.15.216.180:8080/job/
 vprofile-Code-Analysis/build?token=testtoken -H "Jenkins-Crumb:8cb80f4f56d6d35c2121a1cf35b7b501"
+- You should see a job being build in your Jenkins.
