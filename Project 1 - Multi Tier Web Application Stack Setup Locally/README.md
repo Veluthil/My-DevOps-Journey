@@ -22,7 +22,7 @@ Follow these steps to set up your virtual machines:
 
 1. Clone the source code repository https://github.com/Veluthil/Vprofile-Project.git (or https://github.com/hkhcoder/vprofile-project.git).
 2. Navigate into the repository folder.
-3. Move to the `vagrant/Manual_provisioning` directory (This file is also accessible within this Project 1 at the following location: '\vagrant\Manual provisioning\Vagrantfile' directory).
+3. Move to the `vagrant/Manual_provisioning` directory (This file is also accessible within this Project 1 at the following location: `\vagrant\Manual provisioning\Vagrantfile` directory).
 
 Now, bring up the virtual machines using the command:
 
