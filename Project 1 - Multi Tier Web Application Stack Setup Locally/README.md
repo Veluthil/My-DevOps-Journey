@@ -4,16 +4,7 @@ Welcome to this project where I've orchestrated a 3-Tier Application Stack setup
 
 The project utilizes Maven to build the artifact, which is then deployed to the Tomcat server.
 
-## Database
-In this project, MySQL serves as the chosen database management system. If you're working on a Linux Ubuntu 14.04 environment, you can follow these steps to set up MySQL:
-
-- Update the package index: `$ sudo apt-get update`
-- Install MySQL server: `$ sudo apt-get install mysql-server`
-
-Next, navigate to the following file:
-- `/src/main/resources/db_backup.sql`
-- The `db_backup.sql` file is a MySQL dump containing the required database schema. To import it into your MySQL server, execute the following command:
-  `> mysql -u <user_name> -p accounts < db_backup.sql`
+The Java project 'Vprofile' was created by Imran Teli, the instructor of 'DevOps Beginners to Advanced with Projects - 2023'.
 
 ### Prerequisites
 
@@ -29,10 +20,9 @@ Ensure you have the following tools and software installed:
 
 Follow these steps to set up your virtual machines:
 
-1. Clone the source code repository.
+1. Clone the source code repository https://github.com/Veluthil/Vprofile-Project.git (or https://github.com/hkhcoder/vprofile-project.git).
 2. Navigate into the repository folder.
-3. Switch to the main branch.
-4. Move to the `vagrant/Manual_provisioning` directory.
+3. Move to the `vagrant/Manual_provisioning` directory (This file is also accessible within this Project 1 at the following location: '\vagrant\Manual provisioning\Vagrantfile' directory).
 
 Now, bring up the virtual machines using the command:
 
@@ -41,6 +31,17 @@ vagrant up
 ```
 
 **Note:** The setup might take some time due to various factors. If the setup halts midway, run the `vagrant up` command again. The hostname and `/etc/hosts` entries for all VMs will be updated automatically.
+
+## Database
+In this project, MySQL serves as the chosen database management system. If you're working on a Linux Ubuntu 14.04 environment, you can follow these steps to set up MySQL:
+
+- Update the package index: `$ sudo apt-get update`
+- Install MySQL server: `$ sudo apt-get install mysql-server`
+
+Next, navigate to the following file:
+- `/src/main/resources/db_backup.sql`
+- The `db_backup.sql` file is a MySQL dump containing the required database schema. To import it into your MySQL server, execute the following command:
+  `> mysql -u <user_name> -p accounts < db_backup.sql`
 
 ### Service Provisioning
 
@@ -306,7 +307,7 @@ sudo firewall-cmd --reload
 1. Download the source code:
 
 ```sh
-git clone -b main https://github.com/hkhcoder/vprofile-project.git
+git clone -b main https://github.com/Veluthil/Vprofile-Project.git
 ```
 
 2. Update configuration:
