@@ -27,8 +27,7 @@ All of the scripts are available in this repository - `Project 2 - Automated Set
 - Clone the repository from one of the following links:
 ```sh
 git clone https://github.com/Veluthil/Vprofile-Project.git
-```
-```sh
+# or
 git clone https://github.com/hkhcoder/vprofile-project.git
 ```
 
