@@ -24,9 +24,12 @@ All of the scripts are available in this repository - `Project 2 - Automated Set
 - Create a final Bash Script `nginx.sh` for provisioning Nginx server which will forward requests to the backend application.
 
 ## 2. Bring up the VMs
-- Clone the repository:
+- Clone the repository from one of the following links:
 ```sh
 git clone https://github.com/Veluthil/Vprofile-Project.git
+```
+```sh
+git clone https://github.com/hkhcoder/vprofile-project.git
 ```
 
 - Go to the directory where Vagrantfile exists and install the plugin below:
