@@ -1,5 +1,7 @@
 # Project 7 - Continuous Integration and Continuous Delivery with Jenkins and GitHub (Build Triggers)
 
+In Jenkins, build triggers are essential mechanisms that kickstart the execution of a Jenkins job, commonly referred to as a build or project. These triggers are designed to automatically commence the job in response to specific events or conditions. Within this project, we'll delve into some of these key build triggers.
+
 ## Pre-requisities:
 
 * AWS Account
