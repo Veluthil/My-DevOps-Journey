@@ -83,7 +83,7 @@ sudo -i
 curl http://169.254.169.254/latest/user-data
 systemctl status rabbitmq-server
 ```
-_Note: It may take some time to run userdata script after you connect to the server. You can check the process `ps -ef` to see if the process starts for the service. If not, wait some time and check with `systemctl status <service_name>` command again._
+_Note: It may take some time to run userdata script after you connect to the server. You can check the process with `ps -ef` to see if the process starts for the service. If it does not, wait some time and check with `systemctl status <service_name>` command again._
 
 ### 3. Create Private Hosted Zone in Route53 
 
