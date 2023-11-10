@@ -1,6 +1,6 @@
 # Project 2 - Automated Setup of Multi Tier App
 
-In the first project I have set up the 3-Tier Application manually, but in this one I will create bash scripts to automate our VM creation/provisioning through Vagrantfile.
+In the first project I have set up the 3-Tier Application manually, but in this one I will create bash scripts to automate the VM creation/provisioning through Vagrantfile.
 
 ## Prerequisites
 
@@ -15,7 +15,7 @@ All of the scripts are available in this repository - `Project 2 - Automated Set
 ### Bash Script for the database
 - Create `mysql.sh` file for the database.
 ### Bash Script for Memcache
-- Create `memcache.sh` for provisionining our memcached server.
+- Create `memcache.sh` for provisionining the memcached server.
 ### Bash Script for RabbitMQ
 - `rabbitmq.sh` for RabbitMQ.
 ### Bash Script for Application
@@ -51,7 +51,7 @@ Be aware that this will take some time.
 ```sh
 vagrant halt
 ```
-- To start bring up the VMs once more use:
+- To start, bring up the VMs once more using:
 ```sh
 vagrant up 
 ```
