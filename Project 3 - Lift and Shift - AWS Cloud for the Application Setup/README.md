@@ -1,5 +1,7 @@
 # Project 3 - Lift and Shift - AWS Cloud for the Application Setup
 
+In my previous project, I developed a multi-tier web application using Vagrant. For the current project, my plan is to elevate its operational status by hosting and running it on the AWS cloud for production, employing a lift-and-shift strategy.
+
 ## Prerequisites:
  * AWS Account
  * Registered DNS Name
