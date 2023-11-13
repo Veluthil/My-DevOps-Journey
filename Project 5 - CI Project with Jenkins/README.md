@@ -1,5 +1,6 @@
 # Project 5 - Continuous Integration with Jenkins, Nexus, SonarQube and Slack
 
+In this project, I will implement continuous integration using Jenkins, leveraging EC2 instances, Nexus, SonarQube, and setting up Slack notifications triggered upon successful pipeline runs.
 
 ## Prerequisities:
 
