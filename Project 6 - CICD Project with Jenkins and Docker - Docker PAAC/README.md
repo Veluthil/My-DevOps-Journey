@@ -94,7 +94,7 @@ Secret Access Key: PASTE HERE SECRET ACCESS KEY FROM THE .CSV DOWNLOADED IN THE 
 
 ### 5. Create a Jenkins pipeline.
 
-- Create a new item in Jenkins (for example 'docker-ci-pipeline'), choose pipeline and paste the following script (remember to fill it with your own data)
+- Create a new item in Jenkins (for example 'docker-ci-pipeline'), choose pipeline and paste the following script (remember to fill it with your own data).
 
 ```groovy
 pipeline {
@@ -214,7 +214,7 @@ Container port: 8080
 Tags: 
 Name: vprofileapptask
 ```
-- After creating this task definition, click on it and go to `Task execution role` - we have to add CloudWatch policy to this role. Click on `Add permissions` -> `Attach policies` -> attach `CloudWatchLogsFullAccess`
+- After creating this task definition, click on it and go to `Task execution role` - we have to add CloudWatch policy to this role. Click on `Add permissions` -> `Attach policies` -> attach `CloudWatchLogsFullAccess`.
 
 - Go to the created cluster -> `Services` -> `Create`:
 ```
@@ -347,7 +347,7 @@ pipeline {
   }
 }
 ```
-- Go to `Jenkins` -> `Manage Jenkins` -> `Plugins` -> `Available` -> find and install without restart `Pipeline: AWS Steps`
+- Go to `Jenkins` -> `Manage Jenkins` -> `Plugins` -> `Available` -> find and install without restart `Pipeline: AWS Steps`.
 - Create new item, for example `cicd-pipeline-ecs`, choose `Pipeline` and paste the above groovy script. Save it.
 - Go to the ECS and make sure that everything works properly. Note down the container ID (you can find it in task, in the `Container runtime ID` column). When we will run our pipeline, the new container will be created and this one will be deleted.
 - Go to Jenkins and Build Now.
