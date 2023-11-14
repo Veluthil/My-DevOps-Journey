@@ -82,7 +82,7 @@ Additional Details: copy it from userdata/sonar_setup.sh
 #### For Jenkins Server:
 
 - SSH to Jenkins server and check system status for Jenkins. 
-- To unlock Jenkins get the admin password from this directory `/var/lib/jenkins/secrets/initialAdminPassword` 
+- To unlock Jenkins get the admin password from this directory `/var/lib/jenkins/secrets/initialAdminPassword`.
 ```sh
 sudo -i
 systemctl status jenkins
@@ -121,9 +121,9 @@ cat /opt/nexus/sonatype-work/nexus3/admin.password
 
 ### 4. Install JDK8 and Maven.
 
-- This application uses both JDK11 and JDK8
-- Go to `Manage Jenkins` -> `Tools`
-- ssh to Jenkins EC2 and find JAVA_HOME path in /usr/lib/jvm/
+- This application uses both JDK11 and JDK8.
+- Go to `Manage Jenkins` -> `Tools`.
+- ssh to Jenkins EC2 and find JAVA_HOME path in `/usr/lib/jvm/`.
 - Find JDK section and click Add JDK:
 ```sh
 Name: OracleJDK11
@@ -139,7 +139,7 @@ untick Install Automatically
 JAVA_HOME: LOOK AT THE NEXT STEP
 ```
 - Currently Jenkins has JDK-11 (this app can also work with it), so ssh into Jenkins server and install JDK-8. Get the PATH to JDK-8 and paste to JAVA_HOME in the previous step. 
-- After installation `JAVA_HOME` for JDK-8 is `/usr/lib/jvm/java-1.8.0-openjdk-amd64`
+- After installation `JAVA_HOME` for JDK-8 is `/usr/lib/jvm/java-1.8.0-openjdk-amd64`.
 ```sh
 sudo apt update -y
 sudo apt install openjdk-8-jdk -y
@@ -158,7 +158,7 @@ Version: 3.9.3
 
 ### 5. Install Plugins for CI
 
-- Go to `Manage Jenkins` -> `Manage Plugins` -> `Available`
+- Go to `Manage Jenkins` -> `Manage Plugins` -> `Available`.
 - Install without restart:
 ```sh 
 Nexus Artifact Uploader
@@ -170,7 +170,7 @@ Pipeline Utility Steps
 
 ### 6. Create the first Pipeline
 
-- Go to `Dashboard` -> `New Item` in Jenkins, choose Pipeline and name it as you like
+- Go to `Dashboard` -> `New Item` in Jenkins, choose Pipeline and name it as you like.
 - In Pipeline section paste the following script:
 ```groovy
 pipeline {
@@ -215,20 +215,20 @@ pipeline {
 ### 7. Code Analysis
 
 - First integrate SonarQube with Jenkins and install SonarQube Scanner tool.
-- Go to `Manage Jenkins` -> `Tools` -> `SonarQube Scanner` -> `Add SonarQube Scanner`
+- Go to `Manage Jenkins` -> `Tools` -> `SonarQube Scanner` -> `Add SonarQube Scanner`.
 ```sh
 Name: sonar4.7
 Check: Install automatically
 Version: SonarQube Scanner 4.7.0.*
 ```
-- Go to `Configure system` -> `SonarQube servers`
+- Go to `Configure system` -> `SonarQube servers`.
 ```sh
 Check: Environmental variables
 Name: sonar
 Server URL: http://FETCH SONARQUBE PUBLIC OR PRIVATE IP - REMEMBER THAT PUBLIC IP WILL CHANGE EACH TIME YOU WILL POWER OFF AND ON AN INSTANCE
 Server authentication token: save and LOOK FOR THE NEXT STEP
 ```
-- Go to SonarQube -> `My Account` -> `Security` -> `Generate Token` and copy its value in a next step
+- Go to SonarQube -> `My Account` -> `Security` -> `Generate Token` and copy its value in a next step.
 ```sh
 Generate Tokens: jenkins
 ```
@@ -445,12 +445,12 @@ URL: http://JENKINS PRIVATE IP:8080/sonarqube-webhook
 ### 10. Upload the artifact to Nexus Repository
 
 - Go to `http://NEXUS PUBLIC IP:8081` and sign in with login `admin` and password that you set previously.
-- Go to `Settings` -> `Repositories` -> `Create Repository` -> `maven2 (hosted)`
+- Go to `Settings` -> `Repositories` -> `Create Repository` -> `maven2 (hosted)`.
 ```sh
 Name: vprofile-repo
 ```
 - Create repository.
-- Go to Jenkins -> `Manage Jenkins` -> `Manage Credentials` -> `Stores scoped to Jenkins` -> `Jenkins` -> `Global credentials` -> `Add Credentials` 
+- Go to Jenkins -> `Manage Jenkins` -> `Manage Credentials` -> `Stores scoped to Jenkins` -> `Jenkins` -> `Global credentials` -> `Add Credentials`.
 ```sh
 Username: admin
 Password: YOUR NEXUS PASSWORD
@@ -546,7 +546,7 @@ pipeline {
     }
 }
 ```
-- Go to `Manage Jenkins` -> `Configure System` -> `Build Timestamp` -> `Pattern` 
+- Go to `Manage Jenkins` -> `Configure System` -> `Build Timestamp` -> `Pattern`.
 ```
 yy-MM-dd_HH-mm [or set it to any other pattern you like]
 ```
@@ -563,7 +563,7 @@ In SonarQube Webhook you can also update the Jenkins IP to the private one, if y
 - Now create a token to allow Jenkins authenticate into this workspace - search for 'add apps to slack' on Google and look for `Jenkins CI` app. Click on it and choose your previously created channel (jenkinscicd). Click on `Add Jenkins CI integration`.
 Copy and store the token that got created. Click on `Save settings`.
 - Go to Jenkins -> `Manage Jenkins` -> `Plugins` -> search for `Slack Notification` and install without a restart.
-- Go to `Configure System` -> `Slack`
+- Go to `Configure System` -> `Slack`.
 ```
 Workspace: vprofilecicd-[HERE INSERT UNIQUE CHARACTERS FOR YOUR WORKSPACE - CHECK IT ON YOUR SLACK ACCOUNT]
 Credentials: Jenkins
