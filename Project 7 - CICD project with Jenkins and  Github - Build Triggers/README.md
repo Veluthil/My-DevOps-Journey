@@ -26,7 +26,7 @@ cat ~/.ssh/id_rsa.pub
 
 ### 2. Create a new GitHub repository.
 
-- You can give it any name, for example "Jenkins-Triggers", make it public or private (I have made this one: https://github.com/Veluthil/Jenkins-Triggers.git)
+- You can give it any name, for example "Jenkins-Triggers", make it public or private (I have made this one: https://github.com/Veluthil/Jenkins-Triggers.git).
 - Click on `SSH` and copy the link that appears. Go back to Git Bash/Terminal, create a new directory, where you will clone this repository and cd to it. 
 ```sh
 git clone HERE INSERT YOUR COPIED LINK 
@@ -119,8 +119,8 @@ git push origin main
 - Unlike the Poll SCM option, this job will trigger based solely on the schedule you select, without regard to whether new commits appear on your GitHub account. Feel free to choose any schedule that suits you.
 
 4. Remote triggers
-- First, Generate JOB URL: `Job Configure` -> `Build Triggers` -> check mark on `Trigger builds remotely` -> give a token name -> generate URL & save in a file
-- Generate Token for User: click on your username drop down button (Top right corner of the page) -> `Configure` -> `API Token` -> `Generate` -> copy the token name and save username:tokenname in a file
+- First, Generate JOB URL: `Job Configure` -> `Build Triggers` -> check mark on `Trigger builds remotely` -> give a token name -> generate URL & save in a file.
+- Generate Token for User: click on your username drop down button (Top right corner of the page) -> `Configure` -> `API Token` -> `Generate` -> copy the token name and save username:tokenname in a file.
 - Generate CRUMB: wget command is required for this, so download wget binary for git bash. Extract content in your path to ../Git/mingw64/bin. Run below command in Git Bash/Terminal, (replace username, password, Jenkins URL):
 ```sh
 wget -q --auth-no-challenge --user username --password password --output-document -
