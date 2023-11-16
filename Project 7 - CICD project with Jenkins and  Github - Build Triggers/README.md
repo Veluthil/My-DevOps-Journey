@@ -77,7 +77,7 @@ Save
 
 ### 4. Learn and use Popular Triggers.
 
-1. Git Webhook
+1. Git Webhook:
 - Copy the URL with a port of Jenkins instance and go to your GitHub repository's settings -> `Webhooks` -> `Add webhook`:
 ```
 Payload URL: <paste Jenkins' URL with port here>/github-webhook/
@@ -95,7 +95,7 @@ git push origin main
 ```
 - You should see a new build being created in your Jenkins.
 
-2. Poll SCM
+2. Poll SCM:
 - Go to Jenkins' job -> `Configure` -> uncheck `GitHub hook trigger for GITScm polling` -> select `Poll SCM` -> now, you have to give a schedule in a cron job format in order to make Jenkins check for commits on GitHub. This will be an opposite mechanism from the previous build trigger:
 ```
 * * * * *
@@ -111,14 +111,14 @@ git push origin main
 ```
 - You should see a new build being created in your Jenkins.
 
-3. Scheduled jobs
+3. Scheduled jobs:
 - Go to Jenkins' job -> `Configure` -> uncheck `Poll SCM` -> select `Build periodically` -> `Schedule`:
 ```
 * * * * *
 ```
 - Unlike the Poll SCM option, this job will trigger based solely on the schedule you select, without regard to whether new commits appear on your GitHub account. Feel free to choose any schedule that suits you.
 
-4. Remote triggers
+4. Remote triggers:
 - First, Generate JOB URL: `Job Configure` -> `Build Triggers` -> check mark on `Trigger builds remotely` -> give a token name -> generate URL & save in a file.
 - Generate Token for User: click on your username drop down button (Top right corner of the page) -> `Configure` -> `API Token` -> `Generate` -> copy the token name and save username:tokenname in a file.
 - Generate CRUMB: wget command is required for this, so download wget binary for git bash. Extract content in your path to ../Git/mingw64/bin. Run below command in Git Bash/Terminal, (replace username, password, Jenkins URL):
