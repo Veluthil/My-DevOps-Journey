@@ -28,13 +28,13 @@ In this repository, you'll find a series of projects that reflect my hands-on ex
 
 2. **Jenkins:** Explore Jenkins, a popular tool for continuous integration and continuous delivery. Discover how to set up pipelines, automate builds, and streamline the deployment process.
 
-3. **Ansible:** Master Ansible, a powerful configuration management tool. Dive into automating infrastructure provisioning, application deployment, and maintaining consistency.
+3. **Ansible:** Master Ansible, a powerful configuration management tool. Dive into automating infrastructure provisioning, application deployment, and maintaining consistency. (in progress)
 
-4. **Docker:** Immerse yourself in containerization with Docker. Understand the concepts of containerization, create containerized applications, and manage them effectively.
+4. **Docker:** Immerse yourself in containerization with Docker. Understand the concepts of containerization, create containerized applications, and manage them effectively. (in progress)
 
-5. **Kubernetes:** Dive into Kubernetes, the industry-standard container orchestration platform. Learn to deploy, manage, and scale containerized applications seamlessly.
+5. **Kubernetes:** Dive into Kubernetes, the industry-standard container orchestration platform. Learn to deploy, manage, and scale containerized applications seamlessly. (in progress)
 
-6. **Cloudformation & Terraform:** Explore infrastructure as code (IaC) using CloudFormation and Terraform. Understand how to define and provision cloud resources in an automated and repeatable manner.
+6. **Cloudformation & Terraform:** Explore infrastructure as code (IaC) using CloudFormation and Terraform. Understand how to define and provision cloud resources in an automated and repeatable manner. (in progress)
 
 ## How to Navigate
 
