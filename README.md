@@ -22,7 +22,7 @@ Welcome to my DevOps Learning Journey! This repository serves as a chronicle of 
 
 In this repository, you'll find a series of projects that reflect my hands-on experience and learning path in DevOps. Each project focuses on a specific area, allowing me to dive deep into topics that shape the DevOps landscape. From Linux to CloudFormation, I'll be covering a range of subjects that contribute to a holistic understanding of DevOps practices.
 
-## Projects Included (And Will Include)
+## Projects Included
 
 1. **Linux, AWS, Bash & Python Scripting:** Delve into Linux, AWS services, and scripting languages. Learn how to navigate Linux environments, automate tasks using Bash and Python scripts, and leverage AWS resources.
 
